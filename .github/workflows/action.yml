@@ -1,15 +1,18 @@
 on: [push]
 jobs:
   buildit:
+    strategy:
+      matrix:
+        directory: [a,b]
     runs-on: ubuntu-latest
     env:
       DOCKER_PLATFORMS: linux/amd64,linux/arm64
     steps:
       - name: '❓ Setup QEMU'
         uses: docker/setup-qemu-action@v3
-        # with:
-        #   image: ${{ env.IMAGE_REGISTRY }}/tonistiigi/binfmt:latest
-        #   platforms: all
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: all
 
       - name: '🐋 Set up docker buildx'
         uses: docker/setup-buildx-action@v3
@@ -20,7 +23,7 @@ jobs:
         uses: docker/build-push-action@v6
         id: build
         with:
-          file: Dockerfile
+          file: ${{matrix.directory}}/Dockerfile
           platforms: ${{ env.DOCKER_PLATFORMS }}
           push: false
           tags: "localhost:5000/foo:latest"
