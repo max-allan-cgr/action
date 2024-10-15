@@ -1,5 +1,5 @@
 # Use Wolfi base as builder
-FROM chainguard/chainguard-base AS builder
+FROM chainguard/wolfi-base AS builder
 
 # Install internally trusted root CAs
 RUN apk add --no-cache ca-certificates
