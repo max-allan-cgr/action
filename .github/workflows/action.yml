@@ -1,23 +1,23 @@
- - name: '❓ Setup QEMU'
-        uses: docker/setup-qemu-action@v3
-        with:
-          image: ${{ env.IMAGE_REGISTRY }}/tonistiigi/binfmt:latest
-          platforms: all
+- name: '❓ Setup QEMU'
+  uses: docker/setup-qemu-action@v3
+  with:
+    image: ${{ env.IMAGE_REGISTRY }}/tonistiigi/binfmt:latest
+    platforms: all
 
 - name: '🐋 Set up docker buildx'
-       uses: docker/setup-buildx-action@v3
+  uses: docker/setup-buildx-action@v3
 
 # Here is the build and push action
 
 - name: '🐳 Build & Push Image'
-        uses: docker/build-push-action@v6
-        id: build
-        with:
-          file: ${{ matrix.directory }}/Dockerfile
-          platforms: ${{ env.DOCKER_PLATFORMS }}
-          push: ${{ steps.check.outputs.is_existing != 'true' }}
-          tags: |
-            ${{ github.ref == 'refs/heads/master' && format('{0}/{1}:latest', env.IMAGE_REGISTRY, matrix.image) || '' }}
-            ${{ env.IMAGE_REGISTRY }}/${{ matrix.image }}:${{ env.IMAGE_TAG }}
+  uses: docker/build-push-action@v6
+  id: build
+  with:
+    file: ${{ matrix.directory }}/Dockerfile
+    platforms: ${{ env.DOCKER_PLATFORMS }}
+    push: ${{ steps.check.outputs.is_existing != 'true' }}
+    tags: |
+      ${{ github.ref == 'refs/heads/master' && format('{0}/{1}:latest', env.IMAGE_REGISTRY, matrix.image) || '' }}
+      ${{ env.IMAGE_REGISTRY }}/${{ matrix.image }}:${{ env.IMAGE_TAG }}
 
 #We build for - DOCKER_PLATFORMS: linux/amd64,linux/arm64
