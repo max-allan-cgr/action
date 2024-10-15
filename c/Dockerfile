@@ -1,6 +1,6 @@
 # Use Wolfi base as builder
-FROM chainguard/wolfi-base AS builderB
-RUN [ arch = arm64 ] && sleep 1
+FROM chainguard/wolfi-base AS builderC
+
 # Install internally trusted root CAs
 RUN apk add --no-cache ca-certificates
 RUN update-ca-certificates
@@ -11,8 +11,8 @@ RUN update-ca-certificates
 # APK - Not Available
 FROM chainguard/glibc-dynamic
 
-COPY --from=builderB /etc/ssl/certs /etc/ssl/certs
-COPY --from=builderB /usr/local/share/ca-certificates/ /usr/local/share/ca-certificates/
+COPY --from=builderC /etc/ssl/certs /etc/ssl/certs
+COPY --from=builderC /usr/local/share/ca-certificates/ /usr/local/share/ca-certificates/
 
 # As Apko Images are Single-Layer, Anchore does not
 # detect the USER accurately. Hence we need to set it explicitly

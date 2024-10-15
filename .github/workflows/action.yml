@@ -3,7 +3,7 @@ jobs:
   buildit:
     strategy:
       matrix:
-        directory: [a,b]
+        directory: [a,b,c]
     runs-on: ubuntu-latest
     env:
       DOCKER_PLATFORMS: linux/amd64,linux/arm64
